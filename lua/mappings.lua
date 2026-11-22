@@ -4,6 +4,9 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 
+map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Telescope LSP document symbols" })
+map("n", "<leader>fS", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", { desc = "Telescope LSP workspace symbols" })
+
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 map("n", "<F5>", "<cmd>DapContinue<CR>", { desc = "DAP: Start / Continue" })
@@ -46,7 +49,7 @@ vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Вперёд по истор
 map("n", "<leader>gr", function()
   vim.cmd "silent! wa"
   require("nvchad.term").runner {
-    id = "htoggleTerm",
+    id = "vtoggleTerm",
     pos = "vsp", -- "sp" = нижний сплит, "float" = всплывающее окно, "vsp" = справа
     size = 0.3,
     cmd = "printf '\\033[2A\\033[J\\033[1;34m================ RUN (%s) ================\\033[0m\\n' \"$(date +%H:%M:%S)\" && go run .",
@@ -58,7 +61,7 @@ map("n", "<leader>gf", function()
   vim.cmd "silent! wa"
   local file = vim.fn.expand "%"
   require("nvchad.term").runner {
-    id = "htoggleTerm",
+    id = "vtoggleTerm",
     pos = "vsp",
     cmd = "go run " .. file,
     clear_cmd = "clear && ",
