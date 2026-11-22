@@ -7,6 +7,8 @@ local map = vim.keymap.set
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 map("n", "<F5>", "<cmd>DapContinue<CR>", { desc = "DAP: Start / Continue" })
+map("n", "<F12>", vim.lsp.buf.definition, { desc = "Перейти к определению" })
+map("n", "<S-F12>", vim.lsp.buf.references, { desc = "Найти все использования" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
 vim.keymap.set("n", "<F22>", function()
