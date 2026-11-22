@@ -68,13 +68,38 @@ return {
         numhl = "",
       })
 
-      vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = "#4f4f1c", bold = true })
+      local function set_dap_highlights()
+        local theme = require("nvconfig").base46.theme
+        -- Проверяем, светлая ли тема (по названию темы или по настройке background)
+        local is_light = vim.o.background == "light" or theme:match "light" or theme:match "latte" or theme:match "day"
+
+        local stopped_bg = is_light and "#FFF3CD" or "#4F4F1C" -- мягкий жёлтый для светлой / тёмно-оливковый для тёмной
+
+        vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = stopped_bg, bold = false })
+      end
+
+      -- Применяем сразу при загрузке nvim-dap
+      set_dap_highlights()
+
+      -- Повторно применяем каждый раз при смене темы (<leader>th или toggle_theme)
+      vim.api.nvim_create_autocmd("ColorScheme", {
+        callback = set_dap_highlights,
+      })
+
       vim.fn.sign_define("DapStopped", {
-        text = "▶",
+        text = "➔",
         texthl = "DiagnosticWarn",
         linehl = "DapStoppedLine",
         numhl = "DiagnosticWarn",
       })
+
+      -- vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = "#4f4f1c", bold = true })
+      -- vim.fn.sign_define("DapStopped", {
+      --   text = "▶",
+      --   texthl = "DiagnosticWarn",
+      --   linehl = "DapStoppedLine",
+      --   numhl = "DiagnosticWarn",
+      -- })
     end,
   },
 
