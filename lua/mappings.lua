@@ -6,6 +6,12 @@ local map = vim.keymap.set
 
 map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Telescope LSP document symbols" })
 map("n", "<leader>fS", "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", { desc = "Telescope LSP workspace symbols" })
+map("n", "<leader>fd", function()
+  require("telescope.builtin").live_grep {
+    cwd = vim.fn.expand "%:p:h",
+    prompt_title = "Live Grep in Current File's Folder",
+  }
+end, { desc = "Telescope live grep in current file dir" })
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
@@ -14,36 +20,35 @@ map("n", "<F12>", vim.lsp.buf.definition, { desc = "Перейти к опред
 map("n", "<S-F12>", vim.lsp.buf.references, { desc = "Найти все использования" })
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
-vim.keymap.set("n", "<F22>", function()
+map("n", "<F22>", function()
   require("dap").continue()
 end, { desc = "Start debuggin" })
-vim.keymap.set("n", "<S-F10>", function()
+map("n", "<S-F10>", function()
   require("dap").continue()
 end, { desc = "Start debuggin" })
-vim.keymap.set("n", "<S-F5>", function()
+map("n", "<S-F5>", function()
   require("dap").terminate()
 end, { desc = "Stop debugging" })
-vim.keymap.set("n", "<F17>", function()
+map("n", "<F17>", function()
   require("dap").terminate()
 end, { desc = "Stop debugging" })
-vim.keymap.set("n", "<F9>", function()
+map("n", "<F9>", function()
   require("dap").toggle_breakpoint()
-end, { desc = "Поставить/снять брейкпоинт" })
-vim.keymap.set("n", "<F10>", function()
+end, { desc = "Toggle breakpoint" })
+map("n", "<F10>", function()
   require("dap").step_over()
 end, { desc = "Step Over" })
-vim.keymap.set("n", "<F11>", function()
+map("n", "<F11>", function()
   require("dap").step_into()
 end, { desc = "Step Into" })
-vim.keymap.set("n", "<leader>dt", function()
+map("n", "<leader>dt", function()
   require("dap-go").debug_test()
 end, { desc = "Отладить текущий тест" })
 
 -- Боковая кнопка мыши «Назад» -> Ctrl+o (вернуться назад по истории прыжков)
-vim.keymap.set("n", "<X1Mouse>", "<C-o>", { desc = "Назад по истории прыжков (Мышь)" })
-
+map("n", "<X1Mouse>", "<C-o>", { desc = "Назад (Мышь)" })
 -- Боковая кнопка мыши «Вперёд» -> Ctrl+i (вперёд по истории прыжков)
-vim.keymap.set("n", "<X2Mouse>", "<C-i>", { desc = "Вперёд по истории прыжков (Мышь)" })
+map("n", "<X2Mouse>", "<C-i>", { desc = "Вперёд (Мышь)" })
 
 -- Запуск Go-проекта (go run .) во всплывающем окне или нижнем сплите
 map("n", "<leader>gr", function()
@@ -59,12 +64,15 @@ end, { desc = "Go: Run project" })
 
 map("n", "<leader>gf", function()
   vim.cmd "silent! wa"
+
   local file = vim.fn.expand "%"
+  local is_win = vim.fn.has "win32" == 1
+
   require("nvchad.term").runner {
-    id = "vtoggleTerm",
-    pos = "vsp",
+    id = "floatTerm",
+    pos = "float",
     cmd = "go run " .. file,
-    clear_cmd = "clear && ",
+    clear_cmd = is_win and "cls && " or "clear && ",
   }
 end, { desc = "Go: Run current file" })
 

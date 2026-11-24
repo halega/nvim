@@ -18,6 +18,13 @@ M.term = {
   sizes = {
     vsp = 0.3,
   },
+  float = {
+    row = 0.05,
+    col = 0.1,
+    width = 0.8,
+    height = 0.8,
+    border = "single",
+  },
 }
 
 M.mason = {

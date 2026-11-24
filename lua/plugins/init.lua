@@ -4,18 +4,17 @@ return {
     event = "BufWritePre", -- uncomment for format on save
     opts = require "configs.conform",
   },
-
-  -- These are some examples, uncomment them if you want to see them work!
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+  },
   {
     "neovim/nvim-lspconfig",
     config = function()
       require "configs.lspconfig"
     end,
   },
-
-  -- test new blink
-  -- { import = "nvchad.blink.lazyspec" },
-
+  { import = "nvchad.blink.lazyspec" },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -33,7 +32,6 @@ return {
       },
     },
   },
-
   {
     "mfussenegger/nvim-dap",
     dependencies = {
@@ -148,21 +146,35 @@ return {
     },
     keys = {
       {
-        "<leader>gt",
+        "<leader>ts",
+        function()
+          require("neotest").summary.toggle()
+        end,
+        desc = "Go: Toggle summary",
+      },
+      {
+        "<leader>tt",
         function()
           require("neotest").run.run()
         end,
         desc = "Go: Run nearest test",
       },
       {
-        "<leader>gT",
+        "<leader>tT",
         function()
           require("neotest").run.run(vim.fn.expand "%")
         end,
         desc = "Go: Run test file",
       },
       {
-        "<leader>go",
+        "<leader>tS",
+        function()
+          require("neotest").run.stop()
+        end,
+        desc = "Go: Stop",
+      },
+      {
+        "<leader>to",
         function()
           require("neotest").output.open { enter = true }
         end,
@@ -175,6 +187,19 @@ return {
           require "neotest-golang" {},
         },
       }
+
+      -- Close neovim windows by pressing q
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "neotest-output", "neotest-output-panel", "neotest-summary" },
+        callback = function(event)
+          vim.bo[event.buf].buflisted = false
+          vim.keymap.set("n", "q", "<cmd>close<CR>", {
+            buffer = event.buf,
+            silent = true,
+            desc = "Close Neotest window",
+          })
+        end,
+      })
     end,
   },
   {
