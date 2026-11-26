@@ -62,7 +62,7 @@ map("n", "<leader>gr", function()
   }
 end, { desc = "Go: Run project" })
 
-map("n", "<leader>gf", function()
+map("n", "<leader>gg", function()
   vim.cmd "silent! wa"
 
   local file = vim.fn.expand "%"
